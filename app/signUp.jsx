@@ -10,6 +10,7 @@ import { theme } from "../constants/theme";
 import Input from "../components/Input";
 import { useState } from "react";
 import Button from "../components/Button";
+import { supabase } from "../lib/supabase";
 
 const SignUp = () => {
   const router = useRouter();
@@ -22,6 +23,28 @@ const SignUp = () => {
     if (!emailRef.current || !passwordRef.current) {
       Alert.alert("Sign Up", "Please fill all the blanks field!");
       return;
+    }
+
+    let name = nameRef.current.trim();
+    let email = emailRef.current.trim();
+    let password = passwordRef.current.trim();
+
+    setLoading(true);
+
+    const {
+      data: { session },
+      error,
+    } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: { name },
+      },
+    });
+    setLoading(false);
+
+    if (error) {
+      Alert.alert("Sign Up", error.message);
     }
   };
 
