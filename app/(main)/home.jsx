@@ -6,7 +6,7 @@ import { useAuth } from "../../context/AuthContext";
 import { supabase } from "../../lib/supabase";
 
 const home = () => {
-  const { setAuth } = useAuth();
+  const { user, setAuth } = useAuth();
 
   const onLogout = async () => {
     setAuth(null);
