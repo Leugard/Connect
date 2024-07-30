@@ -4,6 +4,7 @@ import { Stack, useRouter } from "expo-router";
 import { AuthProvider, useAuth } from "../context/AuthContext";
 import { supabase } from "../lib/supabase";
 import { getUserData } from "../services/userService";
+import ExpoStatusBar from "expo-status-bar/build/ExpoStatusBar";
 
 const _layout = () => {
   return (

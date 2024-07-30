@@ -12,6 +12,7 @@ export const theme = {
 
     teal: "#80CBC4",
     tealLight: "#009688",
+    rose: "#E91E63",
   },
   fonts: {
     medium: "500",
