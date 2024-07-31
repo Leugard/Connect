@@ -30,7 +30,7 @@ Connect is a social media application designed to bring people together by shari
 
 ## Releases
 
-You can find the latest releases of Connect on the [Releases](https://github.com/yourusername/connect/releases) page.
+You can find the latest releases of Connect on the [Releases](https://github.com/Leugard/Connect/releases/tag/Alpha) page.
 
 ## Contributing
 
