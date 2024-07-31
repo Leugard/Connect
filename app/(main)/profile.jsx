@@ -79,6 +79,29 @@ const UserHeader = ({ user, router, handleLogout }) => {
               <Icon name="edit" strokeWidth={2.5} size={20} />
             </Pressable>
           </View>
+
+          {/* Username & Address */}
+          <View style={{ alignItems: "center", gap: 4 }}>
+            <Text style={styles.username}>{user && user.name}</Text>
+            <Text style={styles.infoText}>{user && user.address}</Text>
+          </View>
+
+          {/* Email, phone, bio */}
+          <View style={{ gap: 10 }}>
+            <View style={styles.info}>
+              <Icon name="mail" size={20} color={theme.colors.textLight} />
+              <Text style={styles.infoText}>{user && user.email}</Text>
+            </View>
+            {user && user.phoneNumber && (
+              <View style={styles.info}>
+                <Icon name="call" size={20} color={theme.colors.textLight} />
+                <Text style={styles.infoText}>{user && user.phoneNumber}</Text>
+              </View>
+            )}
+            {user && user.bio && (
+              <Text style={styles.infoText}>{user.bio}</Text>
+            )}
+          </View>
         </View>
       </View>
     </View>
@@ -128,7 +151,7 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   infoText: {
-    fontSize: hp(1.2),
+    fontSize: hp(1.8),
     fontWeight: "500",
     color: theme.colors.textLight,
   },
