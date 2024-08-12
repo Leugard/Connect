@@ -2,7 +2,7 @@
   "expo": {
     "name": "Connect",
     "slug": "connect",
-    "version": "0.2.3",
+    "version": "0.4.1",
     "orientation": "portrait",
     "icon": "./assets/images/icon.svg",
     "scheme": "connect",
