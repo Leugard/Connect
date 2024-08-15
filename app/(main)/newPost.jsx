@@ -51,8 +51,6 @@ const NewPost = () => {
 
     let result = await ImagePicker.launchImageLibraryAsync(mediaConfig);
 
-    console.log("file: ", result.assets[0]);
-
     if (!result.canceled) {
       setFile(result.assets[0]);
     }
@@ -106,7 +104,7 @@ const NewPost = () => {
       setFile(null);
       bodyRef.current = "";
       editorRef.current?.setContentHTML("");
-      router.back;
+      router.back();
     } else {
       Alert.alert("Post", res.msg);
     }
