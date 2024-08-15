@@ -1,5 +1,12 @@
-import { Alert, Pressable, StyleSheet, Text, View } from "react-native";
-import React from "react";
+import {
+  Alert,
+  FlatList,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
+import React, { useEffect, useState } from "react";
 import ScreenWrapper from "../../components/ScreenWrapper";
 import Button from "../../components/Button";
 import { useAuth } from "../../context/AuthContext";
@@ -10,10 +17,30 @@ import Icon from "../../assets/icons";
 import { useRouter } from "expo-router";
 import Avatar from "../../components/Avatar";
 import ExpoStatusBar from "expo-status-bar/build/ExpoStatusBar";
+import { fetchPosts } from "../../services/PostService";
+import PostCard from "../../components/PostCard";
+import Loading from "../../components/Loading";
+
+var limit = 0;
 
 const home = () => {
   const { user, setAuth } = useAuth();
   const router = useRouter();
+
+  const [posts, setPosts] = useState([]);
+
+  useEffect(() => {
+    getPosts();
+  });
+
+  const getPosts = async () => {
+    limit = limit + 10;
+
+    let res = await fetchPosts(limit);
+    if (res.success) {
+      setPosts(res.data);
+    }
+  };
 
   return (
     <ScreenWrapper bg="white">
@@ -49,6 +76,22 @@ const home = () => {
             </Pressable>
           </View>
         </View>
+
+        {/* Posts */}
+        <FlatList
+          data={posts}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.listStyle}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={({ item }) => (
+            <PostCard item={item} currentUser={user} router={router} />
+          )}
+          ListFooterComponent={
+            <View style={{ marginVertical: posts.length == 0 ? 200 : 30 }}>
+              <Loading />
+            </View>
+          }
+        />
       </View>
     </ScreenWrapper>
   );
@@ -85,6 +128,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     gap: 18,
+  },
+  listStyle: {
+    paddingTop: 20,
+    paddingHorizontal: wp(4),
   },
   noPosts: {
     fontSize: hp(2),

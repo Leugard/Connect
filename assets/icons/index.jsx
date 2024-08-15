@@ -19,6 +19,7 @@ import Delete from "./Delete";
 import Logout from "./Logout";
 import Image from "./Image";
 import Video from "./Video";
+import threeDotsHorizontal from "./threeDotsHorizontal";
 
 const icons = {
   home: Home,
@@ -40,6 +41,7 @@ const icons = {
   logout: Logout,
   image: Image,
   video: Video,
+  threeDotsHorizontal: threeDotsHorizontal,
 };
 
 const Icon = ({ name, ...props }) => {
