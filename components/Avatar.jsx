@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, useColorScheme, View } from "react-native";
 import React from "react";
 import { theme } from "../constants/theme";
 import { hp } from "../helpers/common";
@@ -11,6 +11,9 @@ const Avatar = ({
   rounded = theme.radius.md,
   style = {},
 }) => {
+  const colorSchema = useColorScheme();
+
+  const borderTheme = colorSchema === "dark" ? "#444444" : "#DDDDDD";
   return (
     <Image
       source={getUserImageSrc(uri)}
@@ -19,6 +22,7 @@ const Avatar = ({
         styles.avatar,
         { height: size, width: size, borderRadius: rounded },
         style,
+        { borderColor: borderTheme },
       ]}
     />
   );
@@ -29,7 +33,6 @@ export default Avatar;
 const styles = StyleSheet.create({
   avatar: {
     borderCurve: "continuous",
-    borderColor: theme.colors.darkLight,
     borderWidth: 1,
   },
 });

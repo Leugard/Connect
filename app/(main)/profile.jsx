@@ -3,6 +3,7 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
+  useColorScheme,
   View,
 } from "react-native";
 import React from "react";
@@ -20,6 +21,11 @@ import Avatar from "../../components/Avatar";
 const Profile = () => {
   const { user, setAuth } = useAuth();
   const router = useRouter();
+  const colorSchema = useColorScheme();
+
+  const backgroundTheme = colorSchema === "dark" ? "#121212" : "#F5F5F5";
+  const titleTheme = colorSchema === "dark" ? "#F5F5F5" : "#121212";
+  const iconTheme = colorSchema === "dark" ? "#F5F5F5" : "#121212";
 
   const onLogout = async () => {
     setAuth(null);
@@ -46,20 +52,36 @@ const Profile = () => {
   };
 
   return (
-    <ScreenWrapper bg="white">
-      <UserHeader user={user} router={router} handleLogout={handleLogout} />
+    <ScreenWrapper bg={backgroundTheme}>
+      <UserHeader
+        user={user}
+        router={router}
+        handleLogout={handleLogout}
+        bg={backgroundTheme}
+      />
     </ScreenWrapper>
   );
 };
 
-const UserHeader = ({ user, router, handleLogout }) => {
+const UserHeader = ({ user, router, handleLogout, bg }) => {
+  const colorSchema = useColorScheme();
+
+  const logoutTheme = colorSchema === "dark" ? "#555555" : "#CCCCCC";
+  const iconBackgroundTheme = colorSchema === "dark" ? "#555555" : "#CCCCCC";
+  const iconTheme = colorSchema === "dark" ? "#A0A0A0" : "#757575";
+  const textTheme = colorSchema === "dark" ? "#E0E0E0" : "#333333";
+  const subTextTheme = colorSchema === "dark" ? "#A0A0A0" : "#757575";
+
   return (
     <View
-      style={{ flex: 1, backgroundColor: "white", paddingHorizontal: wp(4) }}
+      style={{ flex: 1, backgroundColor: { bg }, paddingHorizontal: wp(4) }}
     >
       <View>
         <Header title="Profile" mb={30} />
-        <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+        <TouchableOpacity
+          style={[styles.logoutButton, { backgroundColor: logoutTheme }]}
+          onPress={handleLogout}
+        >
           <Icon name="logout" color={theme.colors.rose} />
         </TouchableOpacity>
       </View>
@@ -73,33 +95,46 @@ const UserHeader = ({ user, router, handleLogout }) => {
               rounded={theme.radius.xxl * 1.4}
             />
             <Pressable
-              style={styles.editIcon}
+              style={[
+                styles.editIcon,
+                { backgroundColor: iconBackgroundTheme },
+              ]}
               onPress={() => router.push("editProfile")}
             >
-              <Icon name="edit" strokeWidth={2.5} size={20} />
+              <Icon name="edit" strokeWidth={2.5} size={20} color={iconTheme} />
             </Pressable>
           </View>
 
           {/* Username & Address */}
           <View style={{ alignItems: "center", gap: 4 }}>
-            <Text style={styles.username}>{user && user.name}</Text>
-            <Text style={styles.infoText}>{user && user.address}</Text>
+            <Text style={[styles.username, { color: textTheme }]}>
+              {user && user.name}
+            </Text>
+            <Text style={[styles.infoText, { color: subTextTheme }]}>
+              {user && user.address}
+            </Text>
           </View>
 
           {/* Email, phone, bio */}
           <View style={{ gap: 10 }}>
-            <View style={styles.info}>
-              <Icon name="mail" size={20} color={theme.colors.textLight} />
-              <Text style={styles.infoText}>{user && user.email}</Text>
+            <View style={[styles.info]}>
+              <Icon name="mail" size={20} color={iconTheme} />
+              <Text style={[styles.infoText, { color: subTextTheme }]}>
+                {user && user.email}
+              </Text>
             </View>
             {user && user.phoneNumber && (
               <View style={styles.info}>
-                <Icon name="call" size={20} color={theme.colors.textLight} />
-                <Text style={styles.infoText}>{user && user.phoneNumber}</Text>
+                <Icon name="call" size={20} color={iconTheme} />
+                <Text style={[styles.infoText, { color: subTextTheme }]}>
+                  {user && user.phoneNumber}
+                </Text>
               </View>
             )}
             {user && user.bio && (
-              <Text style={styles.infoText}>{user.bio}</Text>
+              <Text style={[styles.infoText, { color: subTextTheme }]}>
+                {user.bio}
+              </Text>
             )}
           </View>
         </View>
@@ -133,7 +168,6 @@ const styles = StyleSheet.create({
     right: -12,
     padding: 7,
     borderRadius: 50,
-    backgroundColor: "white",
     shadowColor: theme.colors.textLight,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.4,
@@ -160,7 +194,6 @@ const styles = StyleSheet.create({
     right: 0,
     padding: 5,
     borderRadius: theme.radius.sm,
-    backgroundColor: "#fee2e2",
   },
   listStyle: {
     paddingHorizontal: wp(4),

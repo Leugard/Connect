@@ -1,4 +1,10 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import {
+  Pressable,
+  StyleSheet,
+  Text,
+  useColorScheme,
+  View,
+} from "react-native";
 import React from "react";
 import { theme } from "../constants/theme";
 import { hp } from "../helpers/common";
@@ -12,6 +18,10 @@ const Button = ({
   loading = false,
   hasShadow = true,
 }) => {
+  const colorSchema = useColorScheme();
+
+  const buttonTheme = colorSchema === "dark" ? "#3498DB" : "#2980B9";
+
   const shadowStyle = {
     shadowColor: theme.colors.dark,
     shadowOffset: { width: 0, height: 10 },
@@ -31,7 +41,12 @@ const Button = ({
   return (
     <Pressable
       onPress={onPress}
-      style={[styles.button, buttonStyle, hasShadow && shadowStyle]}
+      style={[
+        styles.button,
+        buttonStyle,
+        hasShadow && shadowStyle,
+        { backgroundColor: buttonTheme },
+      ]}
     >
       <Text style={[styles.text, textStyle]}>{title}</Text>
     </Pressable>
@@ -42,7 +57,6 @@ export default Button;
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: theme.colors.primary,
     height: hp(6.6),
     justifyContent: "center",
     alignItems: "center",

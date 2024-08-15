@@ -1,4 +1,11 @@
-import { Image, Pressable, StyleSheet, Text, View } from "react-native";
+import {
+  Image,
+  Pressable,
+  StyleSheet,
+  Text,
+  useColorScheme,
+  View,
+} from "react-native";
 import ScreenWrapper from "../components/ScreenWrapper";
 import { StatusBar } from "expo-status-bar";
 import { hp, wp } from "../helpers/common";
@@ -7,8 +14,15 @@ import Button from "../components/Button";
 import { router } from "expo-router";
 
 const Welcome = () => {
+  const colorScheme = useColorScheme();
+
+  const backgroundTheme = colorScheme === "dark" ? "#121212" : "#F5F5F5";
+  const textTheme = colorScheme === "dark" ? "#E0E0E0" : "#333333";
+  const subTextTheme = colorScheme === "dark" ? "#A0A0A0" : "#757575";
+  const linkTheme = colorScheme === "dark" ? "#82B1FF" : "#1A73E8";
+
   return (
-    <ScreenWrapper bg="white">
+    <ScreenWrapper bg={backgroundTheme}>
       <StatusBar style="dark" />
       <View style={styles.container}>
         {/* Welcome image */}
@@ -20,8 +34,8 @@ const Welcome = () => {
 
         {/* Title */}
         <View style={{ gap: 20 }}>
-          <Text style={styles.title}>Connect</Text>
-          <Text style={styles.punchline}>
+          <Text style={[styles.title, { color: textTheme }]}>Connect</Text>
+          <Text style={[styles.punchline, { color: subTextTheme }]}>
             Discover New Perspectives and Make Meaningful Connections Every Day.
           </Text>
         </View>
@@ -34,13 +48,15 @@ const Welcome = () => {
             onPress={() => router.push("signUp")}
           />
           <View style={styles.bottomTextContainer}>
-            <Text style={styles.loginText}>Already have an account?</Text>
+            <Text style={[styles.loginText, { color: subTextTheme }]}>
+              Already have an account?
+            </Text>
             <Pressable onPress={() => router.push("login")}>
               <Text
                 style={[
                   styles.loginText,
                   {
-                    color: theme.colors.primary,
+                    color: linkTheme,
                     fontWeight: theme.fonts.semibold,
                   },
                 ]}
@@ -62,7 +78,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "space-around",
-    backgroundColor: "white",
     marginHorizontal: wp(4),
   },
   welcomeImage: {
@@ -71,7 +86,6 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   title: {
-    color: theme.colors.text,
     fontSize: hp(4),
     textAlign: "center",
     fontWeight: theme.fonts.extrabold,
@@ -80,7 +94,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     paddingHorizontal: wp(10),
     fontSize: hp(2.1),
-    color: theme.colors.text,
   },
   footer: {
     gap: 30,
@@ -94,7 +107,6 @@ const styles = StyleSheet.create({
   },
   loginText: {
     textAlign: "center",
-    color: theme.colors.text,
     fontSize: hp(1.95),
   },
 });

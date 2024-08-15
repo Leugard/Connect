@@ -1,4 +1,10 @@
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  useColorScheme,
+} from "react-native";
 import React from "react";
 import { theme } from "../constants/theme";
 import { hp, wp } from "../helpers/common";
@@ -10,24 +16,15 @@ import { getSupabaseFileUrl } from "../services/imageService";
 import { Image } from "expo-image";
 import { Video } from "expo-av";
 
-const textStyle = {
-  color: theme.colors.dark,
-  fontSize: hp(2.2),
-};
-
-const tagsStyles = {
-  div: textStyle,
-  p: textStyle,
-  ol: textStyle,
-  h1: {
-    color: theme.colors.dark,
-  },
-  h4: {
-    color: theme.colors.dark,
-  },
-};
-
 const PostCard = ({ item, currentUser, router, hasShadow = true }) => {
+  const colorSchema = useColorScheme();
+
+  const backgroundTheme = colorSchema === "dark" ? "#1E1E1E" : "#FFFFFF";
+  const textTheme = colorSchema === "dark" ? "#F5F5F5" : "#121212";
+  const subTextTheme = colorSchema === "dark" ? "#B0B0B0" : "#666666";
+  const iconTheme = colorSchema === "dark" ? "#F5F5F5" : "#121212";
+  const borderTheme = colorSchema === "dark" ? "#444444" : "#DDDDDD";
+
   const shadowStyle = {
     shadowOffset: {
       width: 0,
@@ -38,6 +35,23 @@ const PostCard = ({ item, currentUser, router, hasShadow = true }) => {
     elevation: 1,
   };
 
+  const textStyle = {
+    color: textTheme,
+    fontSize: hp(2),
+  };
+
+  const tagsStyles = {
+    div: textStyle,
+    p: textStyle,
+    ol: textStyle,
+    h1: {
+      color: textTheme,
+    },
+    h4: {
+      color: textTheme,
+    },
+  };
+
   const openPostDetails = () => {};
 
   const createdAt = moment(item?.created_at).format("MMM D");
@@ -45,7 +59,13 @@ const PostCard = ({ item, currentUser, router, hasShadow = true }) => {
   const liked = false;
 
   return (
-    <View style={[styles.container, hasShadow && shadowStyle]}>
+    <View
+      style={[
+        styles.container,
+        hasShadow && shadowStyle,
+        { backgroundColor: backgroundTheme, borderColor: borderTheme },
+      ]}
+    >
       <View style={styles.header}>
         {/* User info and post time */}
         <View style={styles.userInfo}>
@@ -55,8 +75,12 @@ const PostCard = ({ item, currentUser, router, hasShadow = true }) => {
             rounded={theme.radius.md}
           />
           <View style={{ gap: 2 }}>
-            <Text style={styles.username}>{item?.user?.name}</Text>
-            <Text style={styles.postTime}>{createdAt}</Text>
+            <Text style={[styles.username, { color: textTheme }]}>
+              {item?.user?.name}
+            </Text>
+            <Text style={[styles.postTime, { color: subTextTheme }]}>
+              {createdAt}
+            </Text>
           </View>
         </View>
 
@@ -65,7 +89,7 @@ const PostCard = ({ item, currentUser, router, hasShadow = true }) => {
             name="threeDotsHorizontal"
             size={hp(3.4)}
             strokeWidth={3}
-            color={theme.colors.text}
+            color={iconTheme}
           />
         </TouchableOpacity>
       </View>
@@ -113,20 +137,22 @@ const PostCard = ({ item, currentUser, router, hasShadow = true }) => {
               name="heart"
               size={24}
               fill={liked ? theme.colors.rose : "transparent"}
-              color={liked ? theme.colors.rose : theme.colors.textLight}
+              color={liked ? theme.colors.rose : subTextTheme}
             />
           </TouchableOpacity>
-          <Text style={styles.count}>{likes?.length}</Text>
+          <Text style={[styles.count, { color: subTextTheme }]}>
+            {likes?.length}
+          </Text>
         </View>
         <View style={styles.footerButton}>
           <TouchableOpacity>
-            <Icon name="comment" size={24} color={theme.colors.textLight} />
+            <Icon name="comment" size={24} color={subTextTheme} />
           </TouchableOpacity>
-          <Text style={styles.count}>0</Text>
+          <Text style={[styles.count, { color: subTextTheme }]}>0</Text>
         </View>
         <View style={styles.footerButton}>
           <TouchableOpacity>
-            <Icon name="share" size={24} color={theme.colors.textLight} />
+            <Icon name="share" size={24} color={subTextTheme} />
           </TouchableOpacity>
         </View>
       </View>
@@ -144,9 +170,7 @@ const styles = StyleSheet.create({
     borderCurve: "continuous",
     padding: 10,
     paddingVertical: 12,
-    backgroundColor: "white",
     borderWidth: 0.5,
-    borderColor: theme.colors.gray,
     shadowColor: "#000",
   },
   header: {
@@ -160,12 +184,10 @@ const styles = StyleSheet.create({
   },
   username: {
     fontSize: hp(2.1),
-    color: theme.colors.text,
     fontWeight: theme.fonts.medium,
   },
   postTime: {
     fontSize: hp(1.8),
-    color: theme.colors.textLight,
     fontWeight: theme.fonts.medium,
   },
   content: {
@@ -197,7 +219,6 @@ const styles = StyleSheet.create({
     gap: 18,
   },
   count: {
-    color: theme.colors.text,
     fontSize: hp(1.8),
   },
 });

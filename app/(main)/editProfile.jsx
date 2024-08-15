@@ -1,4 +1,10 @@
-import { Pressable, ScrollView, StyleSheet, View } from "react-native";
+import {
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  useColorScheme,
+  View,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import ScreenWrapper from "../../components/ScreenWrapper";
 import { hp, wp } from "../../helpers/common";
@@ -20,6 +26,14 @@ const EditProfile = () => {
   const { user: currentUser, setUserData } = useAuth();
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const colorScheme = useColorScheme();
+
+  const backgroundTheme = colorScheme === "dark" ? "#121212" : "#F5F5F5";
+  const textTheme = colorScheme === "dark" ? "#E0E0E0" : "#333333";
+  const subTextTheme = colorScheme === "dark" ? "#A0A0A0" : "#757575 ";
+  const iconTheme = colorScheme === "dark" ? "#A0A0A0" : "#757575 ";
+  const placeholderTheme = colorScheme === "dark" ? "#777777" : "#AAAAAA";
+  const borderTheme = colorScheme === "dark" ? "#444444" : "#DDDDDD";
 
   const [user, setUser] = useState({
     name: "",
@@ -81,7 +95,7 @@ const EditProfile = () => {
       : getUserImageSrc(user.image);
 
   return (
-    <ScreenWrapper bg="white">
+    <ScreenWrapper bg={backgroundTheme}>
       <View style={styles.container}>
         <ScrollView style={{ flex: 1 }}>
           <Header title="Edit Profile" />
@@ -89,12 +103,23 @@ const EditProfile = () => {
           {/* Form */}
           <View style={styles.form}>
             <View style={styles.avatarContainer}>
-              <Image source={imageSource} style={styles.avatar} />
-              <Pressable style={styles.cameraIcon} onPress={onPickImage}>
-                <Icon name="camera" size={20} strokeWidth={2.5} />
+              <Image
+                source={imageSource}
+                style={[styles.avatar, { borderColor: borderTheme }]}
+              />
+              <Pressable
+                style={[styles.cameraIcon, { backgroundColor: borderTheme }]}
+                onPress={onPickImage}
+              >
+                <Icon
+                  name="camera"
+                  size={20}
+                  strokeWidth={2.5}
+                  color={iconTheme}
+                />
               </Pressable>
             </View>
-            <Text style={{ fontSize: hp(2), color: theme.colors.text }}>
+            <Text style={{ fontSize: hp(2), color: subTextTheme }}>
               Please fill your profile details
             </Text>
             <Input
@@ -156,7 +181,6 @@ const styles = StyleSheet.create({
     elevation: 7,
   },
   cameraIcon: {
-    backgroundColor: "white",
     position: "absolute",
     bottom: 0,
     right: -10,

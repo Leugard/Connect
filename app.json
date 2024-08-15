@@ -2,9 +2,9 @@
   "expo": {
     "name": "Connect",
     "slug": "connect",
-    "version": "0.4.1",
+    "version": "0.6.7",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.svg",
+    "icon": "./assets/images/logo.svg",
     "scheme": "connect",
     "userInterfaceStyle": "automatic",
     "splash": {
@@ -17,7 +17,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "foregroundImage": "./assets/images/logo.png",
         "backgroundColor": "#ffffff"
       },
       "package": "com.leugard.connect"

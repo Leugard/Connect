@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, useColorScheme, View } from "react-native";
 import React from "react";
 import { useRouter } from "expo-router";
 import BackButton from "./BackButton";
@@ -7,7 +7,9 @@ import { theme } from "../constants/theme";
 
 const Header = ({ title, showBackButton = true, mb = 10 }) => {
   const router = useRouter();
+  const colorSchema = useColorScheme();
 
+  const titleTheme = colorSchema === "dark" ? "#F5F5F5" : "#121212";
   return (
     <View style={[styles.container, { marginBottom: mb }]}>
       {showBackButton && (
@@ -15,7 +17,7 @@ const Header = ({ title, showBackButton = true, mb = 10 }) => {
           <BackButton router={router} />
         </View>
       )}
-      <Text style={styles.title}>{title || ""}</Text>
+      <Text style={[styles.title, { color: titleTheme }]}>{title || ""}</Text>
     </View>
   );
 };
@@ -33,7 +35,6 @@ const styles = StyleSheet.create({
   title: {
     fontSize: hp(3),
     fontWeight: theme.fonts.semibold,
-    color: theme.colors.textDark,
   },
   backButton: {
     position: "absolute",

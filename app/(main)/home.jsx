@@ -4,6 +4,7 @@ import {
   Pressable,
   StyleSheet,
   Text,
+  useColorScheme,
   View,
 } from "react-native";
 import React, { useEffect, useState } from "react";
@@ -25,10 +26,15 @@ import { getUserData } from "../../services/userService";
 var limit = 0;
 
 const home = () => {
+  const [posts, setPosts] = useState([]);
+
   const { user, setAuth } = useAuth();
   const router = useRouter();
+  const colorSchema = useColorScheme();
 
-  const [posts, setPosts] = useState([]);
+  const backgroundTheme = colorSchema === "dark" ? "#121212" : "#F5F5F5";
+  const titleTheme = colorSchema === "dark" ? "#F5F5F5" : "#121212";
+  const iconTheme = colorSchema === "dark" ? "#F5F5F5" : "#121212";
 
   const handlePostEvent = async (payload) => {
     if (payload.eventType == "INSERT" && payload?.new?.id) {
@@ -66,19 +72,19 @@ const home = () => {
   };
 
   return (
-    <ScreenWrapper bg="white">
+    <ScreenWrapper bg={backgroundTheme}>
       <ExpoStatusBar style="dark" />
       <View style={styles.container}>
         {/* Header */}
         <View style={styles.header}>
-          <Text style={styles.title}>Connect</Text>
+          <Text style={[styles.title, { color: titleTheme }]}>Connect</Text>
           <View style={styles.icons}>
             <Pressable onPress={() => router.push("notifications")}>
               <Icon
                 name="heart"
                 size={hp(3.2)}
                 strokeWidth={2}
-                color={theme.colors.text}
+                color={iconTheme}
               />
             </Pressable>
             <Pressable onPress={() => router.push("newPost")}>
@@ -86,7 +92,7 @@ const home = () => {
                 name="plus"
                 size={hp(3.2)}
                 strokeWidth={2}
-                color={theme.colors.text}
+                color={iconTheme}
               />
             </Pressable>
             <Pressable onPress={() => router.push("profile")}>
@@ -107,7 +113,12 @@ const home = () => {
           contentContainerStyle={styles.listStyle}
           keyExtractor={(item) => item.id.toString()}
           renderItem={({ item }) => (
-            <PostCard item={item} currentUser={user} router={router} />
+            <PostCard
+              item={item}
+              currentUser={user}
+              router={router}
+              hasShadow={colorSchema === "dark" ? false : true}
+            />
           )}
           ListFooterComponent={
             <View style={{ marginVertical: posts.length == 0 ? 200 : 30 }}>
@@ -134,7 +145,6 @@ const styles = StyleSheet.create({
     marginHorizontal: wp(4),
   },
   title: {
-    color: theme.colors.text,
     fontSize: hp(3.7),
     fontWeight: theme.fonts.bold,
   },

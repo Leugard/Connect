@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
+  useColorScheme,
   View,
 } from "react-native";
 import ScreenWrapper from "../../components/ScreenWrapper";
@@ -35,6 +36,14 @@ const NewPost = () => {
   const [loading, setLoading] = useState(false);
   const [file, setFile] = useState(file);
 
+  const colorSchema = useColorScheme();
+
+  const backgroundTheme = colorSchema === "dark" ? "#121212" : "#F5F5F5";
+  const textTheme = colorSchema === "dark" ? "#F5F5F5" : "#121212";
+  const subTextTheme = colorSchema === "dark" ? "#B0B0B0" : "#666666";
+  const iconTheme = colorSchema === "dark" ? "#B0B0B0" : "#666666";
+  const borderTheme = colorSchema === "dark" ? "#444444" : "#DDDDDD";
+
   const onPick = async (isImage) => {
     let mediaConfig = {
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -62,6 +71,7 @@ const NewPost = () => {
 
     return false;
   };
+
   const getFileType = (file) => {
     if (!file) return null;
     if (isLocalFile(file)) {
@@ -111,7 +121,7 @@ const NewPost = () => {
   };
 
   return (
-    <ScreenWrapper bg="white">
+    <ScreenWrapper bg={backgroundTheme}>
       <View style={styles.container}>
         <Header title="Create Post" />
         <ScrollView contentContainerStyle={{ gap: 20 }}>
@@ -123,8 +133,12 @@ const NewPost = () => {
               rounded={theme.radius.xl}
             />
             <View style={{ gap: 2 }}>
-              <Text style={styles.username}>{user && user.name}</Text>
-              <Text style={styles.publicText}>Public</Text>
+              <Text style={[styles.username, { color: textTheme }]}>
+                {user && user.name}
+              </Text>
+              <Text style={[styles.publicText, { color: subTextTheme }]}>
+                Public
+              </Text>
             </View>
           </View>
 
@@ -159,14 +173,16 @@ const NewPost = () => {
             </View>
           )}
 
-          <View style={styles.media}>
-            <Text style={styles.addImageText}>Add to your post</Text>
+          <View style={[styles.media, { borderColor: borderTheme }]}>
+            <Text style={[styles.addImageText, { color: subTextTheme }]}>
+              Add to your post
+            </Text>
             <View style={styles.mediaIcons}>
               <TouchableOpacity onPress={() => onPick(true)}>
-                <Icon name="image" size={30} color={theme.colors.dark} />
+                <Icon name="image" size={30} color={iconTheme} />
               </TouchableOpacity>
               <TouchableOpacity onPress={() => onPick(false)}>
-                <Icon name="video" size={33} color={theme.colors.dark} />
+                <Icon name="video" size={33} color={iconTheme} />
               </TouchableOpacity>
             </View>
           </View>
@@ -206,7 +222,6 @@ const styles = StyleSheet.create({
   username: {
     fontSize: hp(2.5),
     fontWeight: theme.fonts.semibold,
-    color: theme.colors.text,
   },
   avatar: {
     height: hp(6.5),
@@ -219,7 +234,6 @@ const styles = StyleSheet.create({
   publicText: {
     fontSize: hp(1.9),
     fontWeight: theme.fonts.medium,
-    color: theme.colors.textLight,
   },
   media: {
     flexDirection: "row",
@@ -230,7 +244,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 18,
     borderRadius: theme.radius.xl,
     borderCurve: "continuous",
-    borderColor: theme.colors.gray,
   },
   mediaIcons: {
     flexDirection: "row",
@@ -240,7 +253,6 @@ const styles = StyleSheet.create({
   addImageText: {
     fontSize: hp(2.7),
     fontWeight: theme.fonts.semibold,
-    color: theme.colors.text,
   },
   imageIcon: {
     borderRadius: theme.radius.md,

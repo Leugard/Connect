@@ -1,4 +1,12 @@
-import { Alert, Image, Pressable, StyleSheet, Text, View } from "react-native";
+import {
+  Alert,
+  Image,
+  Pressable,
+  StyleSheet,
+  Text,
+  useColorScheme,
+  View,
+} from "react-native";
 import React, { useRef } from "react";
 import ScreenWrapper from "../components/ScreenWrapper";
 import Icon from "../assets/icons";
@@ -18,6 +26,13 @@ const SignUp = () => {
   const emailRef = useRef("");
   const passwordRef = useRef("");
   const [loading, setLoading] = useState(false);
+  const colorScheme = useColorScheme();
+
+  const backgroundTheme = colorScheme === "dark" ? "#121212" : "#F5F5F5";
+  const textTheme = colorScheme === "dark" ? "#E0E0E0" : "#333333";
+  const subTextTheme = colorScheme === "dark" ? "#A0A0A0" : "#757575";
+  const linkTheme = colorScheme === "dark" ? "#82B1FF" : "#1A73E8";
+  const iconTheme = colorScheme === "dark" ? "#777777" : "#AAAAAA";
 
   const onSubmit = async () => {
     if (!emailRef.current || !passwordRef.current) {
@@ -49,34 +64,42 @@ const SignUp = () => {
   };
 
   return (
-    <ScreenWrapper bg="white">
+    <ScreenWrapper bg={backgroundTheme}>
       <StatusBar style="dark" />
       <View style={styles.container}>
         <BackButton router={router} />
 
         {/* Welcome */}
         <View>
-          <Text style={styles.welcomeText}>Let's</Text>
-          <Text style={styles.welcomeText}>Get Started</Text>
+          <Text style={[styles.welcomeText, { color: textTheme }]}>Let's</Text>
+          <Text style={[styles.welcomeText, { color: textTheme }]}>
+            Get Started
+          </Text>
         </View>
 
         {/* Form */}
         <View style={styles.form}>
-          <Text style={{ fontSize: hp(2), color: theme.colors.text }}>
+          <Text style={{ fontSize: hp(2), color: subTextTheme }}>
             Please enter the details to create an account
           </Text>
           <Input
-            icon={<Icon name="user" size={26} strokeWidth={1.6} />}
+            icon={
+              <Icon name="user" size={26} strokeWidth={1.6} color={iconTheme} />
+            }
             placeholder="Enter your Name"
             onChangeText={(value) => (nameRef.current = value)}
           />
           <Input
-            icon={<Icon name="mail" size={26} strokeWidth={1.6} />}
+            icon={
+              <Icon name="mail" size={26} strokeWidth={1.6} color={iconTheme} />
+            }
             placeholder="Enter your Email"
             onChangeText={(value) => (emailRef.current = value)}
           />
           <Input
-            icon={<Icon name="lock" size={26} strokeWidth={1.6} />}
+            icon={
+              <Icon name="lock" size={26} strokeWidth={1.6} color={iconTheme} />
+            }
             placeholder="Enter your Password"
             secureTextEntry
             onChangeText={(value) => (passwordRef.current = value)}
@@ -88,13 +111,15 @@ const SignUp = () => {
 
         {/* Footer */}
         <View style={styles.footer}>
-          <Text style={styles.footerText}>Already have an Account?</Text>
+          <Text style={[styles.footerText, { color: subTextTheme }]}>
+            Already have an Account?
+          </Text>
           <Pressable onPress={() => router.push("login")}>
             <Text
               style={[
                 styles.footerText,
                 {
-                  color: theme.colors.primaryDark,
+                  color: linkTheme,
                   fontWeight: theme.fonts.semibold,
                 },
               ]}
