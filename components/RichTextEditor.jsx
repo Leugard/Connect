@@ -4,9 +4,10 @@ import {
   RichEditor,
   RichToolbar,
 } from "react-native-pell-rich-editor";
-import { theme } from "../constants/theme";
+import { theme, useTheme } from "../constants/theme";
 
 const RichTextEditor = ({ editorRef, onChange }) => {
+  const theme = useTheme();
   const colorSchema = useColorScheme();
 
   const backgroundTheme = colorSchema === "dark" ? "#1E1E1E" : "#FFFFFF";
@@ -33,7 +34,11 @@ const RichTextEditor = ({ editorRef, onChange }) => {
             <Text style={{ color: tintColor }}>H4</Text>
           ),
         }}
-        style={[styles.richBar, { backgroundColor: backgroundTheme }]}
+        style={{
+          backgroundColor: backgroundTheme,
+          borderTopRightRadius: theme.radius.xl,
+          borderTopLeftRadius: theme.radius.xl,
+        }}
         flatContainerStyle={styles.listStyle}
         selectedIconTint={selectedTheme}
         editor={editorRef}
@@ -42,7 +47,14 @@ const RichTextEditor = ({ editorRef, onChange }) => {
 
       <RichEditor
         ref={editorRef}
-        containerStyle={[styles.rich, { borderColor: borderTheme }]}
+        containerStyle={[
+          styles.rich,
+          {
+            borderColor: borderTheme,
+            borderBottomLeftRadius: theme.radius.xl,
+            borderBottomEndRadius: theme.radius.xl,
+          },
+        ]}
         editorStyle={[styles.contentStyle, { color: textTheme }]}
         placeholder={"What's on your mind"}
         placeholderColor={placeholderTheme}
@@ -55,17 +67,11 @@ const RichTextEditor = ({ editorRef, onChange }) => {
 export default RichTextEditor;
 
 const styles = StyleSheet.create({
-  richBar: {
-    borderTopRightRadius: theme.radius.xl,
-    borderTopLeftRadius: theme.radius.xl,
-  },
   rich: {
     minHeight: 240,
     flex: 1,
     borderWidth: 1.5,
     borderTopWidth: 0,
-    borderBottomLeftRadius: theme.radius.xl,
-    borderBottomEndRadius: theme.radius.xl,
     padding: 5,
   },
   containerStyle: {

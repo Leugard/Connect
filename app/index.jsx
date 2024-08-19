@@ -1,14 +1,10 @@
-import { View, Text, Button, useColorScheme } from "react-native";
+import { View } from "react-native";
 import React from "react";
-import ScreenWrapper from "../components/ScreenWrapper";
-import { useRouter } from "expo-router";
 import Loading from "../components/Loading";
+import { useTheme } from "@react-navigation/native";
 
 const index = () => {
-  const router = useRouter();
-  const colorSchema = useColorScheme();
-
-  const backgroundTheme = colorSchema === "dark" ? "#121212" : "#F5F5F5";
+  const theme = useTheme();
 
   return (
     <View
@@ -16,7 +12,7 @@ const index = () => {
         flex: 1,
         alignItems: "center",
         justifyContent: "center",
-        backgroundColor: backgroundTheme,
+        backgroundColor: theme.colors.background,
       }}
     >
       <Loading />

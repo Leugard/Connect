@@ -1,9 +1,10 @@
 import { StyleSheet, TextInput, useColorScheme, View } from "react-native";
 import React from "react";
-import { theme } from "../constants/theme";
+import { useTheme } from "../constants/theme";
 import { hp } from "../helpers/common";
 
 const Input = (props) => {
+  const theme = useTheme();
   const colorScheme = useColorScheme();
 
   const borderTheme = colorScheme === "dark" ? "#555555" : "#CCCCCC";
@@ -15,7 +16,7 @@ const Input = (props) => {
       style={[
         styles.container,
         props.containerStyles && props.containerStyles,
-        { borderColor: borderTheme },
+        { borderColor: borderTheme, borderRadius: theme.radius.xl },
       ]}
     >
       {props.icon && props.icon}
@@ -38,7 +39,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     borderWidth: 0.4,
-    borderRadius: theme.radius.xl,
     borderCurve: "continuous",
     paddingHorizontal: 18,
     gap: 12,

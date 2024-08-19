@@ -1,6 +1,5 @@
 import {
   Alert,
-  Image,
   Pressable,
   StyleSheet,
   Text,
@@ -14,7 +13,7 @@ import { StatusBar } from "expo-status-bar";
 import BackButton from "../components/BackButton";
 import { useRouter } from "expo-router";
 import { hp, wp } from "../helpers/common";
-import { theme } from "../constants/theme";
+import { useTheme } from "../constants/theme";
 import Input from "../components/Input";
 import { useState } from "react";
 import Button from "../components/Button";
@@ -22,17 +21,12 @@ import { supabase } from "../lib/supabase";
 
 const SignUp = () => {
   const router = useRouter();
+  const theme = useTheme();
   const nameRef = useRef("");
   const emailRef = useRef("");
   const passwordRef = useRef("");
   const [loading, setLoading] = useState(false);
   const colorScheme = useColorScheme();
-
-  const backgroundTheme = colorScheme === "dark" ? "#121212" : "#F5F5F5";
-  const textTheme = colorScheme === "dark" ? "#E0E0E0" : "#333333";
-  const subTextTheme = colorScheme === "dark" ? "#A0A0A0" : "#757575";
-  const linkTheme = colorScheme === "dark" ? "#82B1FF" : "#1A73E8";
-  const iconTheme = colorScheme === "dark" ? "#777777" : "#AAAAAA";
 
   const onSubmit = async () => {
     if (!emailRef.current || !passwordRef.current) {
@@ -64,41 +58,68 @@ const SignUp = () => {
   };
 
   return (
-    <ScreenWrapper bg={backgroundTheme}>
-      <StatusBar style="dark" />
+    <ScreenWrapper bg={theme.colors.background}>
+      <StatusBar style={colorScheme === "dark" ? "light" : "dark"} />
       <View style={styles.container}>
         <BackButton router={router} />
 
         {/* Welcome */}
         <View>
-          <Text style={[styles.welcomeText, { color: textTheme }]}>Let's</Text>
-          <Text style={[styles.welcomeText, { color: textTheme }]}>
+          <Text
+            style={[
+              styles.welcomeText,
+              { color: theme.colors.textPrimary, fontWeight: theme.fonts.bold },
+            ]}
+          >
+            Let's
+          </Text>
+          <Text
+            style={[
+              styles.welcomeText,
+              { color: theme.colors.textPrimary, fontWeight: theme.fonts.bold },
+            ]}
+          >
             Get Started
           </Text>
         </View>
 
         {/* Form */}
         <View style={styles.form}>
-          <Text style={{ fontSize: hp(2), color: subTextTheme }}>
+          <Text style={{ fontSize: hp(2), color: theme.colors.textSecondary }}>
             Please enter the details to create an account
           </Text>
           <Input
             icon={
-              <Icon name="user" size={26} strokeWidth={1.6} color={iconTheme} />
+              <Icon
+                name="user"
+                size={26}
+                strokeWidth={1.6}
+                color={theme.colors.icon}
+              />
             }
             placeholder="Enter your Name"
             onChangeText={(value) => (nameRef.current = value)}
           />
           <Input
             icon={
-              <Icon name="mail" size={26} strokeWidth={1.6} color={iconTheme} />
+              <Icon
+                name="mail"
+                size={26}
+                strokeWidth={1.6}
+                color={theme.colors.icon}
+              />
             }
             placeholder="Enter your Email"
             onChangeText={(value) => (emailRef.current = value)}
           />
           <Input
             icon={
-              <Icon name="lock" size={26} strokeWidth={1.6} color={iconTheme} />
+              <Icon
+                name="lock"
+                size={26}
+                strokeWidth={1.6}
+                color={theme.colors.icon}
+              />
             }
             placeholder="Enter your Password"
             secureTextEntry
@@ -111,7 +132,9 @@ const SignUp = () => {
 
         {/* Footer */}
         <View style={styles.footer}>
-          <Text style={[styles.footerText, { color: subTextTheme }]}>
+          <Text
+            style={[styles.footerText, { color: theme.colors.textSecondary }]}
+          >
             Already have an Account?
           </Text>
           <Pressable onPress={() => router.push("login")}>
@@ -119,7 +142,7 @@ const SignUp = () => {
               style={[
                 styles.footerText,
                 {
-                  color: linkTheme,
+                  color: theme.colors.link,
                   fontWeight: theme.fonts.semibold,
                 },
               ]}
@@ -143,16 +166,9 @@ const styles = StyleSheet.create({
   },
   welcomeText: {
     fontSize: hp(4),
-    fontWeight: theme.fonts.bold,
-    color: theme.colors.text,
   },
   form: {
     gap: 25,
-  },
-  forgotPassword: {
-    textAlign: "right",
-    fontWeight: theme.fonts.semibold,
-    color: theme.colors.text,
   },
   footer: {
     flexDirection: "row",
@@ -162,7 +178,6 @@ const styles = StyleSheet.create({
   },
   footerText: {
     textAlign: "center",
-    color: theme.colors.text,
     fontSize: hp(1.8),
   },
 });

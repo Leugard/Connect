@@ -6,7 +6,7 @@ import {
   View,
 } from "react-native";
 import React from "react";
-import { theme } from "../constants/theme";
+import { theme, useTheme } from "../constants/theme";
 import { hp } from "../helpers/common";
 import Loading from "./Loading";
 
@@ -18,6 +18,7 @@ const Button = ({
   loading = false,
   hasShadow = true,
 }) => {
+  const theme = useTheme();
   const colorSchema = useColorScheme();
 
   const buttonTheme = colorSchema === "dark" ? "#3498DB" : "#2980B9";
@@ -32,7 +33,7 @@ const Button = ({
 
   if (loading) {
     return (
-      <View style={[styles.button, buttonStyle, { backgroundColor: "white" }]}>
+      <View style={[styles.button, buttonStyle]}>
         <Loading />
       </View>
     );
@@ -45,10 +46,24 @@ const Button = ({
         styles.button,
         buttonStyle,
         hasShadow && shadowStyle,
-        { backgroundColor: buttonTheme },
+        {
+          backgroundColor: theme.colors.primary,
+          borderRadius: theme.radius.xl,
+        },
       ]}
     >
-      <Text style={[styles.text, textStyle]}>{title}</Text>
+      <Text
+        style={[
+          styles.text,
+          textStyle,
+          {
+            color: theme.colors.textPrimary,
+            fontWeight: theme.fonts.bold,
+          },
+        ]}
+      >
+        {title}
+      </Text>
     </Pressable>
   );
 };
@@ -61,11 +76,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderCurve: "continuous",
-    borderRadius: theme.radius.xl,
   },
   text: {
-    fontSize: hp(2.5),
-    color: "white",
-    fontWeight: theme.fonts.bold,
+    fontSize: hp(2.8),
   },
 });

@@ -11,7 +11,7 @@ import {
 import ScreenWrapper from "../../components/ScreenWrapper";
 import Header from "../../components/Header";
 import { hp, wp } from "../../helpers/common";
-import { theme } from "../../constants/theme";
+import { theme, useTheme } from "../../constants/theme";
 import Avatar from "../../components/Avatar";
 import { useAuth } from "../../context/AuthContext";
 import RichTextEditor from "../../components/RichTextEditor";
@@ -24,6 +24,7 @@ import { Image } from "expo-image";
 import { getSupabaseFileUrl } from "../../services/imageService";
 import { Video } from "expo-av";
 import { createOrUpdatePost } from "../../services/PostService";
+import { StatusBar } from "expo-status-bar";
 
 const NewPost = () => {
   const { user } = useAuth();
@@ -32,17 +33,12 @@ const NewPost = () => {
   const editorRef = useRef(null);
 
   const router = useRouter();
+  const theme = useTheme();
 
   const [loading, setLoading] = useState(false);
   const [file, setFile] = useState(file);
 
   const colorSchema = useColorScheme();
-
-  const backgroundTheme = colorSchema === "dark" ? "#121212" : "#F5F5F5";
-  const textTheme = colorSchema === "dark" ? "#F5F5F5" : "#121212";
-  const subTextTheme = colorSchema === "dark" ? "#B0B0B0" : "#666666";
-  const iconTheme = colorSchema === "dark" ? "#B0B0B0" : "#666666";
-  const borderTheme = colorSchema === "dark" ? "#444444" : "#DDDDDD";
 
   const onPick = async (isImage) => {
     let mediaConfig = {
@@ -121,7 +117,8 @@ const NewPost = () => {
   };
 
   return (
-    <ScreenWrapper bg={backgroundTheme}>
+    <ScreenWrapper bg={theme.colors.background}>
+      <StatusBar style={colorSchema === "dark" ? "light" : "dark"} />
       <View style={styles.container}>
         <Header title="Create Post" />
         <ScrollView contentContainerStyle={{ gap: 20 }}>
@@ -133,10 +130,26 @@ const NewPost = () => {
               rounded={theme.radius.xl}
             />
             <View style={{ gap: 2 }}>
-              <Text style={[styles.username, { color: textTheme }]}>
+              <Text
+                style={[
+                  styles.username,
+                  {
+                    color: theme.colors.textPrimary,
+                    fontWeight: theme.fonts.semibold,
+                  },
+                ]}
+              >
                 {user && user.name}
               </Text>
-              <Text style={[styles.publicText, { color: subTextTheme }]}>
+              <Text
+                style={[
+                  styles.publicText,
+                  {
+                    color: theme.colors.textSecondary,
+                    fontWeight: theme.fonts.medium,
+                  },
+                ]}
+              >
                 Public
               </Text>
             </View>
@@ -150,7 +163,14 @@ const NewPost = () => {
           </View>
 
           {file && (
-            <View style={styles.file}>
+            <View
+              style={[
+                styles.file,
+                {
+                  borderRadius: theme.radius.xl,
+                },
+              ]}
+            >
               {getFileType(file) == "video" ? (
                 <Video
                   style={{ flex: 1 }}
@@ -173,16 +193,32 @@ const NewPost = () => {
             </View>
           )}
 
-          <View style={[styles.media, { borderColor: borderTheme }]}>
-            <Text style={[styles.addImageText, { color: subTextTheme }]}>
+          <View
+            style={[
+              styles.media,
+              {
+                borderColor: theme.colors.border,
+                borderRadius: theme.radius.xl,
+              },
+            ]}
+          >
+            <Text
+              style={[
+                styles.addImageText,
+                {
+                  color: theme.colors.textSecondary,
+                  fontWeight: theme.fonts.semibold,
+                },
+              ]}
+            >
               Add to your post
             </Text>
             <View style={styles.mediaIcons}>
               <TouchableOpacity onPress={() => onPick(true)}>
-                <Icon name="image" size={30} color={iconTheme} />
+                <Icon name="image" size={30} color={theme.colors.icon} />
               </TouchableOpacity>
               <TouchableOpacity onPress={() => onPick(false)}>
-                <Icon name="video" size={33} color={iconTheme} />
+                <Icon name="video" size={33} color={theme.colors.icon} />
               </TouchableOpacity>
             </View>
           </View>
@@ -210,8 +246,8 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: hp(2.5),
-    fontWeight: theme.fonts.semibold,
-    color: theme.colors.text,
+    // fontWeight: theme.fonts.semibold,
+    // color: theme.colors.text,
     textAlign: "center",
   },
   header: {
@@ -221,19 +257,17 @@ const styles = StyleSheet.create({
   },
   username: {
     fontSize: hp(2.5),
-    fontWeight: theme.fonts.semibold,
   },
   avatar: {
     height: hp(6.5),
     width: hp(6.5),
-    borderRadius: theme.radius.xl,
+    // borderRadius: theme.radius.xl,
     borderCurve: "continuous",
     borderWidth: 1,
     borderColor: "rgba(0,0,0,0.1)",
   },
   publicText: {
     fontSize: hp(1.9),
-    fontWeight: theme.fonts.medium,
   },
   media: {
     flexDirection: "row",
@@ -242,7 +276,6 @@ const styles = StyleSheet.create({
     borderWidth: 1.5,
     padding: 12,
     paddingHorizontal: 18,
-    borderRadius: theme.radius.xl,
     borderCurve: "continuous",
   },
   mediaIcons: {
@@ -252,15 +285,13 @@ const styles = StyleSheet.create({
   },
   addImageText: {
     fontSize: hp(2.7),
-    fontWeight: theme.fonts.semibold,
   },
   imageIcon: {
-    borderRadius: theme.radius.md,
+    // borderRadius: theme.radius.md,
   },
   file: {
     height: hp(30),
     width: "100%",
-    borderRadius: theme.radius.xl,
     overflow: "hidden",
     borderCurve: "continuous",
   },

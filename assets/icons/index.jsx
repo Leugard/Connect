@@ -1,6 +1,6 @@
 import React from "react";
 import Home from "./Home";
-import { theme } from "../../constants/theme";
+import { theme, useTheme } from "../../constants/theme";
 import Mail from "./Mail";
 import Lock from "./Lock";
 import User from "./User";
@@ -45,13 +45,15 @@ const icons = {
 };
 
 const Icon = ({ name, ...props }) => {
+  const theme = useTheme();
   const IconComponent = icons[name];
+
   return (
     <IconComponent
       height={props.size || 24}
       width={props.size || 24}
       strokeWidth={props.strokeWidth || 1.9}
-      color={theme.colors.textLight}
+      color={theme.colors.textPrimary}
       {...props}
     />
   );

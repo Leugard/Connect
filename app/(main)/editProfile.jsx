@@ -8,7 +8,7 @@ import {
 import React, { useEffect, useState } from "react";
 import ScreenWrapper from "../../components/ScreenWrapper";
 import { hp, wp } from "../../helpers/common";
-import { theme } from "../../constants/theme";
+import { useTheme } from "../../constants/theme";
 import Header from "../../components/Header";
 import { Image } from "expo-image";
 import { useAuth } from "../../context/AuthContext";
@@ -17,23 +17,17 @@ import Icon from "../../assets/icons";
 import { Text } from "react-native";
 import Input from "../../components/Input";
 import Button from "../../components/Button";
-import { Alert } from "react-native";
 import { updateUser } from "../../services/userService";
 import { useRouter } from "expo-router";
 import * as ImagePicker from "expo-image-picker";
+import { StatusBar } from "expo-status-bar";
 
 const EditProfile = () => {
   const { user: currentUser, setUserData } = useAuth();
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const theme = useTheme();
   const colorScheme = useColorScheme();
-
-  const backgroundTheme = colorScheme === "dark" ? "#121212" : "#F5F5F5";
-  const textTheme = colorScheme === "dark" ? "#E0E0E0" : "#333333";
-  const subTextTheme = colorScheme === "dark" ? "#A0A0A0" : "#757575 ";
-  const iconTheme = colorScheme === "dark" ? "#A0A0A0" : "#757575 ";
-  const placeholderTheme = colorScheme === "dark" ? "#777777" : "#AAAAAA";
-  const borderTheme = colorScheme === "dark" ? "#444444" : "#DDDDDD";
 
   const [user, setUser] = useState({
     name: "",
@@ -95,7 +89,8 @@ const EditProfile = () => {
       : getUserImageSrc(user.image);
 
   return (
-    <ScreenWrapper bg={backgroundTheme}>
+    <ScreenWrapper bg={theme.colors.background}>
+      <StatusBar style={colorScheme === "dark" ? "light" : "dark"} />
       <View style={styles.container}>
         <ScrollView style={{ flex: 1 }}>
           <Header title="Edit Profile" />
@@ -105,21 +100,32 @@ const EditProfile = () => {
             <View style={styles.avatarContainer}>
               <Image
                 source={imageSource}
-                style={[styles.avatar, { borderColor: borderTheme }]}
+                style={[
+                  styles.avatar,
+                  {
+                    borderColor: theme.colors.border,
+                    borderRadius: theme.radius.xxl * 1.8,
+                  },
+                ]}
               />
               <Pressable
-                style={[styles.cameraIcon, { backgroundColor: borderTheme }]}
+                style={[
+                  styles.cameraIcon,
+                  { backgroundColor: theme.colors.border },
+                ]}
                 onPress={onPickImage}
               >
                 <Icon
                   name="camera"
                   size={20}
                   strokeWidth={2.5}
-                  color={iconTheme}
+                  color={theme.colors.icon}
                 />
               </Pressable>
             </View>
-            <Text style={{ fontSize: hp(2), color: subTextTheme }}>
+            <Text
+              style={{ fontSize: hp(2), color: theme.colors.textSecondary }}
+            >
               Please fill your profile details
             </Text>
             <Input
@@ -171,10 +177,9 @@ const styles = StyleSheet.create({
   avatar: {
     width: "100%",
     height: "100%",
-    borderRadius: theme.radius.xxl * 1.8,
     borderCurve: "continuous",
     borderWidth: 1,
-    borderColor: theme.colors.darkLight,
+    // borderColor: theme.colors.darkLight,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.4,
     shadowRadius: 5,
@@ -186,7 +191,7 @@ const styles = StyleSheet.create({
     right: -10,
     padding: 8,
     borderRadius: 50,
-    shadowColor: theme.colors.textLight,
+    // shadowColor: theme.colors.textLight,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.4,
     shadowRadius: 5,
@@ -199,8 +204,8 @@ const styles = StyleSheet.create({
   input: {
     flexDirection: "row",
     borderWidth: 0.4,
-    borderColor: theme.colors.text,
-    borderRadius: theme.radius.xxl,
+    // borderColor: theme.colors.text,
+    // borderRadius: theme.radius.xxl,
     borderCurve: "continuous",
     padding: 17,
     paddingHorizontal: 20,

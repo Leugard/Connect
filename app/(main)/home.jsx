@@ -1,5 +1,4 @@
 import {
-  Alert,
   FlatList,
   Pressable,
   StyleSheet,
@@ -9,11 +8,10 @@ import {
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import ScreenWrapper from "../../components/ScreenWrapper";
-import Button from "../../components/Button";
 import { useAuth } from "../../context/AuthContext";
 import { supabase } from "../../lib/supabase";
 import { hp, wp } from "../../helpers/common";
-import { theme } from "../../constants/theme";
+import { useTheme } from "../../constants/theme";
 import Icon from "../../assets/icons";
 import { useRouter } from "expo-router";
 import Avatar from "../../components/Avatar";
@@ -22,6 +20,7 @@ import { fetchPosts } from "../../services/PostService";
 import PostCard from "../../components/PostCard";
 import Loading from "../../components/Loading";
 import { getUserData } from "../../services/userService";
+import { StatusBar } from "expo-status-bar";
 
 var limit = 0;
 
@@ -30,11 +29,8 @@ const home = () => {
 
   const { user, setAuth } = useAuth();
   const router = useRouter();
+  const theme = useTheme();
   const colorSchema = useColorScheme();
-
-  const backgroundTheme = colorSchema === "dark" ? "#121212" : "#F5F5F5";
-  const titleTheme = colorSchema === "dark" ? "#F5F5F5" : "#121212";
-  const iconTheme = colorSchema === "dark" ? "#F5F5F5" : "#121212";
 
   const handlePostEvent = async (payload) => {
     if (payload.eventType == "INSERT" && payload?.new?.id) {
@@ -72,19 +68,26 @@ const home = () => {
   };
 
   return (
-    <ScreenWrapper bg={backgroundTheme}>
-      <ExpoStatusBar style="dark" />
+    <ScreenWrapper bg={theme.colors.background}>
+      <StatusBar style={colorSchema === "dark" ? "light" : "dark"} />
       <View style={styles.container}>
         {/* Header */}
         <View style={styles.header}>
-          <Text style={[styles.title, { color: titleTheme }]}>Connect</Text>
+          <Text
+            style={[
+              styles.title,
+              { color: theme.colors.textPrimary, fontWeight: theme.fonts.bold },
+            ]}
+          >
+            Connect
+          </Text>
           <View style={styles.icons}>
             <Pressable onPress={() => router.push("notifications")}>
               <Icon
                 name="heart"
                 size={hp(3.2)}
                 strokeWidth={2}
-                color={iconTheme}
+                color={theme.colors.icon}
               />
             </Pressable>
             <Pressable onPress={() => router.push("newPost")}>
@@ -92,7 +95,7 @@ const home = () => {
                 name="plus"
                 size={hp(3.2)}
                 strokeWidth={2}
-                color={iconTheme}
+                color={theme.colors.icon}
               />
             </Pressable>
             <Pressable onPress={() => router.push("profile")}>
@@ -146,15 +149,6 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: hp(3.7),
-    fontWeight: theme.fonts.bold,
-  },
-  avatarImage: {
-    height: hp(4.3),
-    width: hp(4.3),
-    borderRadius: theme.radius.sm,
-    borderCurve: "continuous",
-    borderColor: theme.colors.gray,
-    borderWidth: 3,
   },
   icons: {
     flexDirection: "row",
@@ -169,7 +163,6 @@ const styles = StyleSheet.create({
   noPosts: {
     fontSize: hp(2),
     textAlign: "center",
-    color: theme.colors.text,
   },
   pill: {
     position: "absolute",
@@ -180,11 +173,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 20,
-    backgroundColor: theme.colors.tealLight,
   },
   pillText: {
     color: "white",
     fontSize: hp(1.2),
-    fontWeight: theme.fonts.bold,
+    // fontWeight: theme.fonts.bold,
   },
 });

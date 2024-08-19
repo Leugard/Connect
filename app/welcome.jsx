@@ -9,21 +9,17 @@ import {
 import ScreenWrapper from "../components/ScreenWrapper";
 import { StatusBar } from "expo-status-bar";
 import { hp, wp } from "../helpers/common";
-import { theme } from "../constants/theme";
+import { theme, useTheme } from "../constants/theme";
 import Button from "../components/Button";
 import { router } from "expo-router";
 
 const Welcome = () => {
+  const theme = useTheme();
   const colorScheme = useColorScheme();
 
-  const backgroundTheme = colorScheme === "dark" ? "#121212" : "#F5F5F5";
-  const textTheme = colorScheme === "dark" ? "#E0E0E0" : "#333333";
-  const subTextTheme = colorScheme === "dark" ? "#A0A0A0" : "#757575";
-  const linkTheme = colorScheme === "dark" ? "#82B1FF" : "#1A73E8";
-
   return (
-    <ScreenWrapper bg={backgroundTheme}>
-      <StatusBar style="dark" />
+    <ScreenWrapper bg={theme.colors.background}>
+      <StatusBar style={colorScheme === "dark" ? "light" : "dark"} />
       <View style={styles.container}>
         {/* Welcome image */}
         <Image
@@ -34,8 +30,20 @@ const Welcome = () => {
 
         {/* Title */}
         <View style={{ gap: 20 }}>
-          <Text style={[styles.title, { color: textTheme }]}>Connect</Text>
-          <Text style={[styles.punchline, { color: subTextTheme }]}>
+          <Text
+            style={[
+              styles.title,
+              {
+                color: theme.colors.textPrimary,
+                fontWeight: theme.fonts.extrabold,
+              },
+            ]}
+          >
+            Connect
+          </Text>
+          <Text
+            style={[styles.punchline, { color: theme.colors.textSecondary }]}
+          >
             Discover New Perspectives and Make Meaningful Connections Every Day.
           </Text>
         </View>
@@ -48,7 +56,9 @@ const Welcome = () => {
             onPress={() => router.push("signUp")}
           />
           <View style={styles.bottomTextContainer}>
-            <Text style={[styles.loginText, { color: subTextTheme }]}>
+            <Text
+              style={[styles.loginText, { color: theme.colors.textSecondary }]}
+            >
               Already have an account?
             </Text>
             <Pressable onPress={() => router.push("login")}>
@@ -56,7 +66,7 @@ const Welcome = () => {
                 style={[
                   styles.loginText,
                   {
-                    color: linkTheme,
+                    color: theme.colors.link,
                     fontWeight: theme.fonts.semibold,
                   },
                 ]}
@@ -86,14 +96,13 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   title: {
-    fontSize: hp(4),
+    fontSize: hp(5),
     textAlign: "center",
-    fontWeight: theme.fonts.extrabold,
   },
   punchline: {
     textAlign: "center",
-    paddingHorizontal: wp(10),
-    fontSize: hp(2.1),
+    paddingHorizontal: wp(5),
+    fontSize: hp(2.5),
   },
   footer: {
     gap: 30,

@@ -13,19 +13,17 @@ import ScreenWrapper from "../../components/ScreenWrapper";
 import Header from "../../components/Header";
 import { hp, wp } from "../../helpers/common";
 import Icon from "../../assets/icons";
-import { theme } from "../../constants/theme";
+import { theme, useTheme } from "../../constants/theme";
 import { Alert } from "react-native";
 import { supabase } from "../../lib/supabase";
 import Avatar from "../../components/Avatar";
+import { StatusBar } from "expo-status-bar";
 
 const Profile = () => {
   const { user, setAuth } = useAuth();
   const router = useRouter();
+  const theme = useTheme();
   const colorSchema = useColorScheme();
-
-  const backgroundTheme = colorSchema === "dark" ? "#121212" : "#F5F5F5";
-  const titleTheme = colorSchema === "dark" ? "#F5F5F5" : "#121212";
-  const iconTheme = colorSchema === "dark" ? "#F5F5F5" : "#121212";
 
   const onLogout = async () => {
     setAuth(null);
@@ -52,25 +50,21 @@ const Profile = () => {
   };
 
   return (
-    <ScreenWrapper bg={backgroundTheme}>
+    <ScreenWrapper bg={theme.colors.background}>
+      <StatusBar style={colorSchema === "dark" ? "light" : "dark"} />
       <UserHeader
         user={user}
         router={router}
         handleLogout={handleLogout}
-        bg={backgroundTheme}
+        bg={theme.colors.background}
       />
     </ScreenWrapper>
   );
 };
 
 const UserHeader = ({ user, router, handleLogout, bg }) => {
+  const theme = useTheme();
   const colorSchema = useColorScheme();
-
-  const logoutTheme = colorSchema === "dark" ? "#555555" : "#CCCCCC";
-  const iconBackgroundTheme = colorSchema === "dark" ? "#555555" : "#CCCCCC";
-  const iconTheme = colorSchema === "dark" ? "#A0A0A0" : "#757575";
-  const textTheme = colorSchema === "dark" ? "#E0E0E0" : "#333333";
-  const subTextTheme = colorSchema === "dark" ? "#A0A0A0" : "#757575";
 
   return (
     <View
@@ -79,10 +73,16 @@ const UserHeader = ({ user, router, handleLogout, bg }) => {
       <View>
         <Header title="Profile" mb={30} />
         <TouchableOpacity
-          style={[styles.logoutButton, { backgroundColor: logoutTheme }]}
+          style={[
+            styles.logoutButton,
+            {
+              backgroundColor: theme.colors.border,
+              borderRadius: theme.radius.sm,
+            },
+          ]}
           onPress={handleLogout}
         >
-          <Icon name="logout" color={theme.colors.rose} />
+          <Icon name="logout" color={theme.colors.logout} />
         </TouchableOpacity>
       </View>
 
@@ -97,20 +97,32 @@ const UserHeader = ({ user, router, handleLogout, bg }) => {
             <Pressable
               style={[
                 styles.editIcon,
-                { backgroundColor: iconBackgroundTheme },
+                {
+                  backgroundColor: theme.colors.background,
+                  shadowColor: theme.colors.textPrimary,
+                },
               ]}
               onPress={() => router.push("editProfile")}
             >
-              <Icon name="edit" strokeWidth={2.5} size={20} color={iconTheme} />
+              <Icon
+                name="edit"
+                strokeWidth={2.5}
+                size={20}
+                color={theme.colors.icon}
+              />
             </Pressable>
           </View>
 
           {/* Username & Address */}
           <View style={{ alignItems: "center", gap: 4 }}>
-            <Text style={[styles.username, { color: textTheme }]}>
+            <Text
+              style={[styles.username, { color: theme.colors.textPrimary }]}
+            >
               {user && user.name}
             </Text>
-            <Text style={[styles.infoText, { color: subTextTheme }]}>
+            <Text
+              style={[styles.infoText, { color: theme.colors.textSecondary }]}
+            >
               {user && user.address}
             </Text>
           </View>
@@ -118,21 +130,30 @@ const UserHeader = ({ user, router, handleLogout, bg }) => {
           {/* Email, phone, bio */}
           <View style={{ gap: 10 }}>
             <View style={[styles.info]}>
-              <Icon name="mail" size={20} color={iconTheme} />
-              <Text style={[styles.infoText, { color: subTextTheme }]}>
+              <Icon name="mail" size={20} color={theme.colors.icon} />
+              <Text
+                style={[styles.infoText, { color: theme.colors.textSecondary }]}
+              >
                 {user && user.email}
               </Text>
             </View>
             {user && user.phoneNumber && (
               <View style={styles.info}>
-                <Icon name="call" size={20} color={iconTheme} />
-                <Text style={[styles.infoText, { color: subTextTheme }]}>
+                <Icon name="call" size={20} color={theme.colors.icon} />
+                <Text
+                  style={[
+                    styles.infoText,
+                    { color: theme.colors.textSecondary },
+                  ]}
+                >
                   {user && user.phoneNumber}
                 </Text>
               </View>
             )}
             {user && user.bio && (
-              <Text style={[styles.infoText, { color: subTextTheme }]}>
+              <Text
+                style={[styles.infoText, { color: theme.colors.textSecondary }]}
+              >
                 {user.bio}
               </Text>
             )}
@@ -168,7 +189,6 @@ const styles = StyleSheet.create({
     right: -12,
     padding: 7,
     borderRadius: 50,
-    shadowColor: theme.colors.textLight,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.4,
     shadowRadius: 5,
@@ -177,7 +197,6 @@ const styles = StyleSheet.create({
   username: {
     fontSize: hp(3),
     fontWeight: "500",
-    color: theme.colors.textDark,
   },
   info: {
     flexDirection: "row",
@@ -187,13 +206,11 @@ const styles = StyleSheet.create({
   infoText: {
     fontSize: hp(1.8),
     fontWeight: "500",
-    color: theme.colors.textLight,
   },
   logoutButton: {
     position: "absolute",
     right: 0,
     padding: 5,
-    borderRadius: theme.radius.sm,
   },
   listStyle: {
     paddingHorizontal: wp(4),
@@ -202,6 +219,5 @@ const styles = StyleSheet.create({
   noPosts: {
     fontSize: hp(2),
     textAlign: "center",
-    color: theme.colors.text,
   },
 });

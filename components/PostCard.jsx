@@ -6,7 +6,7 @@ import {
   useColorScheme,
 } from "react-native";
 import React from "react";
-import { theme } from "../constants/theme";
+import { theme, useTheme } from "../constants/theme";
 import { hp, wp } from "../helpers/common";
 import Avatar from "./Avatar";
 import moment from "moment";
@@ -17,6 +17,7 @@ import { Image } from "expo-image";
 import { Video } from "expo-av";
 
 const PostCard = ({ item, currentUser, router, hasShadow = true }) => {
+  const theme = useTheme();
   const colorSchema = useColorScheme();
 
   const backgroundTheme = colorSchema === "dark" ? "#1E1E1E" : "#FFFFFF";
@@ -63,7 +64,11 @@ const PostCard = ({ item, currentUser, router, hasShadow = true }) => {
       style={[
         styles.container,
         hasShadow && shadowStyle,
-        { backgroundColor: backgroundTheme, borderColor: borderTheme },
+        {
+          backgroundColor: backgroundTheme,
+          borderColor: borderTheme,
+          borderRadius: theme.radius.xxl * 1.1,
+        },
       ]}
     >
       <View style={styles.header}>
@@ -75,10 +80,20 @@ const PostCard = ({ item, currentUser, router, hasShadow = true }) => {
             rounded={theme.radius.md}
           />
           <View style={{ gap: 2 }}>
-            <Text style={[styles.username, { color: textTheme }]}>
+            <Text
+              style={[
+                styles.username,
+                { color: textTheme, fontWeight: theme.fonts.medium },
+              ]}
+            >
               {item?.user?.name}
             </Text>
-            <Text style={[styles.postTime, { color: subTextTheme }]}>
+            <Text
+              style={[
+                styles.postTime,
+                { color: subTextTheme, fontWeight: theme.fonts.medium },
+              ]}
+            >
               {createdAt}
             </Text>
           </View>
@@ -166,7 +181,6 @@ const styles = StyleSheet.create({
   container: {
     gap: 10,
     marginBottom: 15,
-    borderRadius: theme.radius.xxl * 1.1,
     borderCurve: "continuous",
     padding: 10,
     paddingVertical: 12,
@@ -184,11 +198,9 @@ const styles = StyleSheet.create({
   },
   username: {
     fontSize: hp(2.1),
-    fontWeight: theme.fonts.medium,
   },
   postTime: {
     fontSize: hp(1.8),
-    fontWeight: theme.fonts.medium,
   },
   content: {
     gap: 10,
@@ -196,7 +208,7 @@ const styles = StyleSheet.create({
   postMedia: {
     height: hp(40),
     width: "100%",
-    borderRadius: theme.radius.xl,
+    // borderRadius: theme.radius.xl,
     borderCurve: "continuous",
   },
   postBody: {
