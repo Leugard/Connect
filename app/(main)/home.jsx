@@ -26,6 +26,7 @@ var limit = 0;
 
 const home = () => {
   const [posts, setPosts] = useState([]);
+  const [hasMore, setHasMore] = useState(true);
 
   const { user, setAuth } = useAuth();
   const router = useRouter();
@@ -51,7 +52,7 @@ const home = () => {
       )
       .subscribe();
 
-    getPosts();
+    // getPosts();
 
     return () => {
       supabase.removeChannel(postChannel);
@@ -59,10 +60,12 @@ const home = () => {
   }, []);
 
   const getPosts = async () => {
+    if (!hasMore) return null;
     limit = limit + 10;
 
     let res = await fetchPosts(limit);
     if (res.success) {
+      if (posts.length == res.data.length) setHasMore(false);
       setPosts(res.data);
     }
   };
@@ -123,10 +126,28 @@ const home = () => {
               hasShadow={colorSchema === "dark" ? false : true}
             />
           )}
+          onEndReached={() => {
+            getPosts();
+            console.log("Got to the end");
+          }}
+          onEndReachedThreshold={0}
           ListFooterComponent={
-            <View style={{ marginVertical: posts.length == 0 ? 200 : 30 }}>
-              <Loading />
-            </View>
+            hasMore ? (
+              <View style={{ marginVertical: posts.length == 0 ? 200 : 30 }}>
+                <Loading />
+              </View>
+            ) : (
+              <View style={{ marginVertical: 30 }}>
+                <Text
+                  style={[
+                    styles.noPosts,
+                    { color: theme.colors.textSecondary },
+                  ]}
+                >
+                  No more posts
+                </Text>
+              </View>
+            )
           }
         />
       </View>
@@ -161,7 +182,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: wp(4),
   },
   noPosts: {
-    fontSize: hp(2),
+    fontSize: hp(2.5),
     textAlign: "center",
   },
   pill: {

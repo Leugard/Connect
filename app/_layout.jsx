@@ -40,7 +40,14 @@ const MainLayout = () => {
     if (res.success) setUserData({ ...res.data, email });
   };
 
-  return <Stack screenOptions={{ headerShown: false }} />;
+  return (
+    <Stack screenOptions={{ headerShown: false }}>
+      <Stack.Screen
+        name="(main)/postDetails"
+        options={{ presentation: "modal" }}
+      />
+    </Stack>
+  );
 };
 
 export default _layout;
