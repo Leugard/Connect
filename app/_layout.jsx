@@ -1,9 +1,10 @@
 import React, { useEffect } from "react";
-import { Stack, useRouter } from "expo-router";
+import { Stack } from "expo-router/stack";
 import { AuthProvider, useAuth } from "../context/AuthContext";
 import { supabase } from "../lib/supabase";
 import { getUserData } from "../services/userService";
 import { LogBox } from "react-native";
+import { useRouter } from "expo-router";
 
 LogBox.ignoreLogs([
   "Warning: TNodeChildrenRenderer",

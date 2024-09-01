@@ -24,7 +24,13 @@ import { Video } from "expo-av";
 import { createPostLike, removePostike } from "../services/PostService";
 import Loading from "./Loading";
 
-const PostCard = ({ item, currentUser, router, hasShadow = true }) => {
+const PostCard = ({
+  item,
+  currentUser,
+  router,
+  hasShadow = true,
+  showMoreIcon = true,
+}) => {
   const theme = useTheme();
   const colorSchema = useColorScheme();
   const [likes, setLikes] = useState([]);
@@ -68,6 +74,7 @@ const PostCard = ({ item, currentUser, router, hasShadow = true }) => {
   }, []);
 
   const openPostDetails = () => {
+    if (!showMoreIcon) return null;
     router.push({ pathname: "postDetails", params: { postId: item?.id } });
   };
 
@@ -151,14 +158,16 @@ const PostCard = ({ item, currentUser, router, hasShadow = true }) => {
           </View>
         </View>
 
-        <TouchableOpacity onPress={openPostDetails}>
-          <Icon
-            name="threeDotsHorizontal"
-            size={hp(3.4)}
-            strokeWidth={3}
-            color={iconTheme}
-          />
-        </TouchableOpacity>
+        {showMoreIcon && (
+          <TouchableOpacity>
+            <Icon
+              name="threeDotsHorizontal"
+              size={hp(3.4)}
+              strokeWidth={3}
+              color={iconTheme}
+            />
+          </TouchableOpacity>
+        )}
       </View>
 
       {/* Post body & media */}
@@ -215,10 +224,12 @@ const PostCard = ({ item, currentUser, router, hasShadow = true }) => {
           </Text>
         </View>
         <View style={styles.footerButton}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={openPostDetails}>
             <Icon name="comment" size={24} color={subTextTheme} />
           </TouchableOpacity>
-          <Text style={[styles.count, { color: subTextTheme }]}>0</Text>
+          <Text style={[styles.count, { color: subTextTheme }]}>
+            {item?.comments[0]?.count}
+          </Text>
         </View>
         <View style={styles.footerButton}>
           {loading ? (

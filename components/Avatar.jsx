@@ -5,12 +5,7 @@ import { hp } from "../helpers/common";
 import { Image } from "expo-image";
 import { getUserImageSrc } from "../services/imageService";
 
-const Avatar = ({
-  uri,
-  size = hp(4.5),
-  rounded = theme.radius.md,
-  style = {},
-}) => {
+const Avatar = ({ uri, size = hp(4.5), rounded = 14, style = {} }) => {
   const colorSchema = useColorScheme();
 
   const borderTheme = colorSchema === "dark" ? "#444444" : "#DDDDDD";

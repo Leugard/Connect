@@ -10,6 +10,7 @@ const darkTheme = {
   border: "#444444",
   logout: "#ff6e6e",
   like: "#64b5f6",
+  borderBackground: "#1E1E1E",
 };
 
 const lightheme = {
@@ -22,6 +23,7 @@ const lightheme = {
   border: "#DDDDDD",
   logout: "#e53935",
   like: "#1e88e5",
+  borderBackground: "#FFFFFF",
 };
 
 export const useTheme = () => {
