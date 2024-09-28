@@ -6,7 +6,7 @@ import {
   useColorScheme,
   View,
 } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { useRouter } from "expo-router";
 import ScreenWrapper from "../../components/ScreenWrapper";
@@ -18,8 +18,16 @@ import { Alert } from "react-native";
 import { supabase } from "../../lib/supabase";
 import Avatar from "../../components/Avatar";
 import { StatusBar } from "expo-status-bar";
+import { fetchPosts } from "../../services/PostService";
+import { FlatList } from "react-native";
+import Loading from "../../components/Loading";
+import PostCard from "../../components/PostCard";
 
+var limit = 0;
 const Profile = () => {
+  const [posts, setPosts] = useState([]);
+  const [hasMore, setHasMore] = useState(true);
+
   const { user, setAuth } = useAuth();
   const router = useRouter();
   const theme = useTheme();
@@ -30,6 +38,17 @@ const Profile = () => {
     const { error } = await supabase.auth.signOut();
     if (error) {
       Alert.alert("Sign out", "Error signing out!");
+    }
+  };
+
+  const getPosts = async () => {
+    if (!hasMore) return null;
+    limit = limit + 10;
+
+    let res = await fetchPosts(limit, user.id);
+    if (res.success) {
+      if (posts.length == res.data.length) setHasMore(false);
+      setPosts(res.data);
     }
   };
 
@@ -52,11 +71,44 @@ const Profile = () => {
   return (
     <ScreenWrapper bg={theme.colors.background}>
       <StatusBar style={colorSchema === "dark" ? "light" : "dark"} />
-      <UserHeader
-        user={user}
-        router={router}
-        handleLogout={handleLogout}
-        bg={theme.colors.background}
+
+      <FlatList
+        data={posts}
+        ListHeaderComponent={
+          <UserHeader
+            user={user}
+            router={router}
+            handleLogout={handleLogout}
+            bg={theme.colors.background}
+          />
+        }
+        ListHeaderComponentStyle={{ marginBottom: 30 }}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.listStyle}
+        keyExtractor={(item) => item.id.toString()}
+        renderItem={({ item }) => (
+          <PostCard item={item} currentUser={user} router={router} />
+        )}
+        onEndReached={() => {
+          getPosts();
+          console.log("Got to the end");
+        }}
+        onEndReachedThreshold={0}
+        ListFooterComponent={
+          hasMore ? (
+            <View style={{ marginVertical: posts.length == 0 ? 100 : 30 }}>
+              <Loading />
+            </View>
+          ) : (
+            <View style={{ marginVertical: 30 }}>
+              <Text
+                style={[styles.noPosts, { color: theme.colors.textSecondary }]}
+              >
+                No more posts
+              </Text>
+            </View>
+          )
+        }
       />
     </ScreenWrapper>
   );

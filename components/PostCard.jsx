@@ -30,6 +30,9 @@ const PostCard = ({
   router,
   hasShadow = true,
   showMoreIcon = true,
+  showDelete = false,
+  onDelete = () => {},
+  onEdit = () => {},
 }) => {
   const theme = useTheme();
   const colorSchema = useColorScheme();
@@ -113,6 +116,21 @@ const PostCard = ({
     Share.share(content);
   };
 
+  const handlePostDelete = () => {
+    Alert.alert("Confirm", "Do you want to delete this post?", [
+      {
+        text: "Cancel",
+        onPress: () => {},
+        style: "cancel",
+      },
+      {
+        text: "Delete",
+        onPress: () => onDelete(item),
+        style: "destructive",
+      },
+    ]);
+  };
+
   const createdAt = moment(item?.created_at).format("MMM D");
   const liked = likes.filter((like) => like.userId == currentUser?.id)[0]
     ? true
@@ -167,6 +185,21 @@ const PostCard = ({
               color={iconTheme}
             />
           </TouchableOpacity>
+        )}
+
+        {showDelete && currentUser.id == item?.userId && (
+          <View style={styles.actions}>
+            <TouchableOpacity onPress={() => onEdit(item)}>
+              <Icon
+                name="edit"
+                size={hp(2.5)}
+                color={theme.colors.textPrimary}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={handlePostDelete}>
+              <Icon name="delete" size={hp(2.5)} color={theme.colors.logout} />
+            </TouchableOpacity>
+          </View>
         )}
       </View>
 
