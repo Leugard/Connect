@@ -5,7 +5,12 @@ import { useTheme } from "../constants/theme";
 import moment from "moment";
 import Icon from "../assets/icons";
 
-const CommentItem = ({ item, canDelete = false, onDelete = () => {} }) => {
+const CommentItem = ({
+  item,
+  canDelete = false,
+  onDelete = () => {},
+  highlight = false,
+}) => {
   const theme = useTheme();
   const createdAt = moment(item?.created_at).format("MMM d");
 
@@ -30,6 +35,11 @@ const CommentItem = ({ item, canDelete = false, onDelete = () => {} }) => {
       <View
         style={[
           styles.content,
+          highlight &&
+            styles.highlight && {
+              borderColor: theme.colors.border,
+              backgroundColor: theme.colors.borderBackground,
+            },
           {
             backgroundColor: theme.colors.borderBackground,
             borderRadius: theme.radius.md,
